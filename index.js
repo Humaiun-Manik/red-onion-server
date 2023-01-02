@@ -22,7 +22,8 @@ async function run() {
 
     const foodCollection = client.db("red_onion").collection("meals");
 
-    app.get("/meal", async (req, res) => {
+    // meals API
+    app.get("/meal-time", async (req, res) => {
       const time = req.query.time;
       const query = { time: time };
       const cursor = foodCollection.find(query);
