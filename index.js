@@ -21,6 +21,7 @@ async function run() {
     await client.connect();
 
     const foodCollection = client.db("red_onion").collection("meals");
+    const orderCollection = client.db("red_onion").collection("orders");
 
     // meals API
     app.get("/meal-time", async (req, res) => {
@@ -29,6 +30,18 @@ async function run() {
       const cursor = foodCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
+    });
+
+    // orders API
+    app.post("/order", async (req, res) => {
+      const order = req.body;
+      const query = { mealId: order.mealId, email: order.email };
+      const exists = await orderCollection.findOne(query);
+      if (exists) {
+        return res.send({ success: false });
+      }
+      const result = await orderCollection.insertOne(order);
+      res.send({ success: true, result });
     });
   } finally {
     // await client.close();
