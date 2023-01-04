@@ -33,6 +33,13 @@ async function run() {
     });
 
     // orders API
+    app.get("/order", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const order = await orderCollection.find(query).toArray();
+      res.send(order);
+    });
+
     app.post("/order", async (req, res) => {
       const order = req.body;
       const query = { mealId: order.mealId, email: order.email };
